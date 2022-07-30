@@ -9,7 +9,7 @@ spring:
         wiretap: true
       routes:
         - id: reward
-          uri: ${SERVICE_DISCOVERY_NAMESPACE}.reward
+          uri: ${SERVICE_DISCOVERY_NAMESPACE_NAME}.reward
           predicates:
             - Path=/api/reward/**
 management:
