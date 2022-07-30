@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: @project.artifactId@
+  cloud:
+    gateway:
+      httpclient:
+        wiretap: true
+      httpserver:
+        wiretap: true
+      routes:
+        - id: reward
+          uri: ${SERVICE_DISCOVERY_NAMESPACE}.reward
+          predicates:
+            - Path=/api/reward/**
+management:
+  endpoint:
+    health:
+      enabled: true

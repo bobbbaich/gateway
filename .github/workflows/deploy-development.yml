@@ -1,0 +1,54 @@
+name: Development - Deploy to Amazon ECS
+
+on:
+  push:
+    branches:
+      - develop
+      - feature/*
+
+env:
+  ENVIRONMENT: development
+  AWS_REGION: us-east-1                      # set this to your preferred AWS region, e.g. us-west-1
+  ECR_REPOSITORY: gateway                     # set this to your Amazon ECR repository name
+
+permissions:
+  contents: read
+
+jobs:
+  run-tests:
+    name: Tests
+    environment: development
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/mvn-spring-boot-tests
+
+  build-image:
+    name: Build and Publish Image
+    needs: run-tests
+    environment: development
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/aws-ecr-publish-image
+        id: aws-ecr-publish-image
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+    outputs:
+      ecr-image: ${{ steps.aws-ecr-publish-image.outputs.ecr-image }}
+
+  deploy:
+    name: Deploy
+    needs: build-image
+    environment: development
+    runs-on: ubuntu-latest
+    env:
+      ECR_IMAGE: ${{ needs.build-image.outputs.ecr-image }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/aws-deploy
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          ecr-image: ${{ env.ECR_IMAGE }}

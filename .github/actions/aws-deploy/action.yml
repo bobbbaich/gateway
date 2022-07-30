@@ -1,0 +1,30 @@
+name: "Deploy to ECS"
+description: "Builds and deploys the React frontend to AWS S3"
+inputs:
+  aws-access-key-id:
+    required: true
+    description: "The aws-access-key-id used to authenticate with AWS"
+  aws-secret-access-key:
+    required: true
+    description: "The aws-secret-access-key used to authenticate with AWS"
+  ecr-image:
+    required: true
+    description: "The ecr-image of the service to be deployed"
+
+runs:
+  using: "composite"
+  steps:
+    - uses: aws-actions/configure-aws-credentials@v1
+      with:
+        # Actions cannot access secrets so pass them in as inputs
+        aws-access-key-id: ${{ inputs.aws-access-key-id }}
+        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - id: deploy-ecs-service
+      uses: aws-actions/aws-cloudformation-github-deploy@v1
+      with:
+        name: ${{ env.ENVIRONMENT }}-gateway-service
+        template: stacks/ecs-service.yaml
+        no-fail-on-empty-changeset: "1"
+        parameter-overrides: "EnvironmentName=${{ env.ENVIRONMENT }}, ImageUrl=${{ inputs.ecr-image }}"

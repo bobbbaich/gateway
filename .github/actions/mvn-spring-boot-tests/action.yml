@@ -1,0 +1,13 @@
+name: "Maven Spring Boot Tests"
+description: "Runs spring boot tests using maven"
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+        cache: 'maven'
+    - run: mvn clean test
+      shell: bash
