@@ -68,7 +68,7 @@ Resources:
               Value: !Ref EnvironmentName
             - Name: SERVICE_DISCOVERY_NAMESPACE_NAME
               Value: !ImportValue
-              'Fn::Sub': '${EnvironmentName}:ServiceDiscoveryNamespaceName'
+                'Fn::Sub': '${EnvironmentName}:ServiceDiscoveryNamespaceName'
 
   Service:
     Type: AWS::ECS::Service
@@ -105,8 +105,8 @@ Resources:
   ServiceDiscoveryService:
     Type: AWS::ServiceDiscovery::Service
     Properties:
-      Name: !Sub ${EnvironmentName}-${ServiceName}-sd
-      Description: !Sub ${EnvironmentName} Application Discovery Service
+      Name: !Ref ServiceName
+      Description: !Sub ${EnvironmentName} ${ServiceName} service
       NamespaceId: !ImportValue
         'Fn::Sub': '${EnvironmentName}:ServiceDiscoveryNamespaceId'
       DnsConfig:
