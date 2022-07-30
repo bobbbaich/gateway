@@ -12,7 +12,7 @@ spring:
     active: ${ACTIVE_ENVIRONMENT:local}
 gateway:
   url:
-    reward: http://${SERVICE_DISCOVERY_NAMESPACE_NAME}.reward
+    reward: http://reward.${SERVICE_DISCOVERY_NAMESPACE_NAME}
 management:
   endpoints:
     web:
