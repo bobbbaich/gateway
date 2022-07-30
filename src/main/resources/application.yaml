@@ -17,4 +17,4 @@ management:
 
 gateway:
   url:
-    reward: ${SERVICE_DISCOVERY_NAMESPACE_NAME}.reward
+    reward: http://${SERVICE_DISCOVERY_NAMESPACE_NAME}.reward
