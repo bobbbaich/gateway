@@ -10,11 +10,11 @@ spring:
             - Path=/api/reward/**
   profiles:
     active: ${ACTIVE_ENVIRONMENT:local}
-management:
-  endpoint:
-    health:
-      enabled: true
-
 gateway:
   url:
     reward: http://${SERVICE_DISCOVERY_NAMESPACE_NAME}.reward
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
