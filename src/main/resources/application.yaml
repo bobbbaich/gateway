@@ -3,16 +3,18 @@ spring:
     name: @project.artifactId@
   cloud:
     gateway:
-      httpclient:
-        wiretap: true
-      httpserver:
-        wiretap: true
       routes:
         - id: reward
-          uri: ${SERVICE_DISCOVERY_NAMESPACE_NAME}.reward
+          uri: ${gateway.url.reward}
           predicates:
             - Path=/api/reward/**
+  profiles:
+    active: ${ACTIVE_ENVIRONMENT:local}
 management:
   endpoint:
     health:
       enabled: true
+
+gateway:
+  url:
+    reward: ${SERVICE_DISCOVERY_NAMESPACE_NAME}.reward

@@ -1,0 +1,3 @@
+gateway:
+  url:
+    reward: http://localhost:8081
