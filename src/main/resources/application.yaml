@@ -1,5 +1,5 @@
 server:
-  port: ${CONTAINER_PORT:8080}
+  port: ${HOST_PORT:8080}
 spring:
   application:
     name: @project.artifactId@
