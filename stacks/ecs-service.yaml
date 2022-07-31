@@ -57,6 +57,7 @@ Resources:
           Image: !Ref ImageUrl
           PortMappings:
             - ContainerPort: !Ref ContainerPort
+              HostPort: 8080
           LogConfiguration:
             LogDriver: 'awslogs'
             Options:
@@ -67,7 +68,8 @@ Resources:
             - Name: ACTIVE_ENVIRONMENT
               Value: !Ref EnvironmentName
             - Name: CONTAINER_PORT
-              Value: !Ref ContainerPort
+              Value: 8080
+#              Value: !Ref ContainerPort
             - Name: SERVICE_DISCOVERY_NAMESPACE_NAME
               Value: !ImportValue
                 'Fn::Sub': '${EnvironmentName}:ServiceDiscoveryNamespaceName'
