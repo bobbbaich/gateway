@@ -102,7 +102,6 @@ Resources:
           TargetGroupArn: !Ref TargetGroup
       ServiceRegistries:
         - RegistryArn: !GetAtt ServiceDiscoveryService.Arn
-          Port: !Ref ContainerPort
 
   ServiceDiscoveryService:
     Type: AWS::ServiceDiscovery::Service
