@@ -12,9 +12,6 @@ Parameters:
   ContainerPort:
     Type: Number
     Default: 80
-  HostPort:
-    Type: Number
-    Default: 8080
   ContainerCpu:
     Type: Number
     Default: 256
@@ -70,8 +67,8 @@ Resources:
           Environment:
             - Name: ACTIVE_ENVIRONMENT
               Value: !Ref EnvironmentName
-            - Name: HOST_PORT
-              Value: !Ref HostPort
+            - Name: CONTAINER_PORT
+              Value: !Ref ContainerPort
             - Name: SERVICE_DISCOVERY_NAMESPACE_NAME
               Value: !ImportValue
                 'Fn::Sub': '${EnvironmentName}:ServiceDiscoveryNamespaceName'
