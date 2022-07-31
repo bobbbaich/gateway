@@ -11,7 +11,7 @@ Parameters:
     Type: String
   ContainerPort:
     Type: Number
-    Default: 8080
+    Default: 80
   ContainerCpu:
     Type: Number
     Default: 256
@@ -66,6 +66,8 @@ Resources:
           Environment:
             - Name: ACTIVE_ENVIRONMENT
               Value: !Ref EnvironmentName
+            - Name: CONTAINER_PORT
+              Value: !Ref ContainerPort
             - Name: SERVICE_DISCOVERY_NAMESPACE_NAME
               Value: !ImportValue
                 'Fn::Sub': '${EnvironmentName}:ServiceDiscoveryNamespaceName'
@@ -113,7 +115,7 @@ Resources:
         RoutingPolicy: MULTIVALUE
         DnsRecords:
           - TTL: 60
-            Type: SRV
+            Type: A
       HealthCheckCustomConfig:
         FailureThreshold: 1
 
