@@ -1,5 +1,6 @@
 server:
-  port: ${CONTAINER_PORT:8080}
+#  port: ${CONTAINER_PORT:8080}
+  port: 8080
 spring:
   application:
     name: @project.artifactId@
