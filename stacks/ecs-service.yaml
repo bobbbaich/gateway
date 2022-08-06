@@ -9,7 +9,6 @@ Parameters:
     Default: gateway
   ImageUrl:
     Type: String
-    Default: docker/getting-started
   ContainerPort:
     Type: Number
     Default: 80
@@ -55,7 +54,8 @@ Resources:
         - Name: !Ref ServiceName
           Cpu: !Ref ServiceCPU
           Memory: !Ref ServiceMemory
-          Image: !Ref ImageUrl
+#          Image: !Ref ImageUrl
+          Image: docker/getting-started
           PortMappings:
             - ContainerPort: !Ref ContainerPort
           LogConfiguration:
