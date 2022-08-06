@@ -68,9 +68,9 @@ Resources:
               Value: !Ref EnvironmentName
             - Name: CONTAINER_PORT
               Value: !Ref ContainerPort
-            - Name: SERVICE_DISCOVERY_NAMESPACE_NAME
-              Value: !ImportValue
-                'Fn::Sub': '${EnvironmentName}:ServiceDiscoveryNamespaceName'
+#            - Name: SERVICE_DISCOVERY_NAMESPACE_NAME
+#              Value: !ImportValue
+#                'Fn::Sub': '${EnvironmentName}:ServiceDiscoveryNamespaceName'
 
   Service:
     Type: AWS::ECS::Service
