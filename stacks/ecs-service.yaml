@@ -54,8 +54,7 @@ Resources:
         - Name: !Ref ServiceName
           Cpu: !Ref ServiceCPU
           Memory: !Ref ServiceMemory
-#          Image: !Ref ImageUrl
-          Image: docker/getting-started
+          Image: !Ref ImageUrl
           PortMappings:
             - ContainerPort: !Ref ContainerPort
           LogConfiguration:
