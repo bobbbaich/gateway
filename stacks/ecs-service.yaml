@@ -9,6 +9,7 @@ Parameters:
     Default: gateway
   ImageUrl:
     Type: String
+    Default: docker/getting-started
   ContainerPort:
     Type: Number
     Default: 80
