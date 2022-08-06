@@ -57,7 +57,6 @@ Resources:
           Image: !Ref ImageUrl
           PortMappings:
             - ContainerPort: !Ref ContainerPort
-              HostPort: 8080
           LogConfiguration:
             LogDriver: 'awslogs'
             Options:
