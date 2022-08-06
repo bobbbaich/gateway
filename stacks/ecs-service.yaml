@@ -68,8 +68,7 @@ Resources:
             - Name: ACTIVE_ENVIRONMENT
               Value: !Ref EnvironmentName
             - Name: CONTAINER_PORT
-              Value: 8080
-#              Value: !Ref ContainerPort
+              Value: !Ref ContainerPort
             - Name: SERVICE_DISCOVERY_NAMESPACE_NAME
               Value: !ImportValue
                 'Fn::Sub': '${EnvironmentName}:ServiceDiscoveryNamespaceName'
