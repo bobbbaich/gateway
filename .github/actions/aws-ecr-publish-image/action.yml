@@ -41,8 +41,7 @@ runs:
         echo "Build, tag, and push image to Amazon ECR"
         ./mvnw clean install -DskipTests
         ECR_IMAGE_URL="$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-        ECR_IMAGE_URL_LATEST="$ECR_REGISTRY/$ECR_REPOSITORY:latest"
-        docker build . -t $ECR_IMAGE_URL_LATEST -t $ECR_IMAGE_URL 
-        docker image push --all-tags $ECR_REGISTRY/$ECR_REPOSITORY
+        docker build . -t $ECR_IMAGE_URL 
+        docker image push ECR_IMAGE_URL
         echo "::set-output name=ecr-image::$(echo $ECR_IMAGE_URL)"
       shell: bash
