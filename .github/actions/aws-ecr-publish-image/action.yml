@@ -40,7 +40,8 @@ runs:
       run: |
         echo "Build, tag, and push image to Amazon ECR"
         ECR_IMAGE_URL="$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-        mvn clean spring-boot:build-image -Dspring-boot.build-image.imageName=$ECR_IMAGE_URL -DskipTests
+        ./mvnw clean install -DskipTests
+        docker build -t $IMAGE_TAG .
         docker push $ECR_IMAGE_URL
         echo "::set-output name=ecr-image::$(echo $ECR_IMAGE_URL)"
       shell: bash
