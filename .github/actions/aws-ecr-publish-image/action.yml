@@ -39,9 +39,8 @@ runs:
         IMAGE_TAG: ${{ github.sha }}
       run: |
         echo "Build, tag, and push image to Amazon ECR"
-        ECR_IMAGE_URL="$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
         ./mvnw clean install -DskipTests
-        docker build -t $IMAGE_TAG .
-        docker push $ECR_IMAGE_URL
-        echo "::set-output name=ecr-image::$(echo $ECR_IMAGE_URL)"
+        docker build -t $ECR_REPOSITORY:latest -t $ECR_REPOSITORY:$IMAGE_TAG .
+        docker image push --all-tags $ECR_REGISTRY/$ECR_REPOSITORY
+        echo "::set-output name=ecr-image::$(echo $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG)"
       shell: bash
