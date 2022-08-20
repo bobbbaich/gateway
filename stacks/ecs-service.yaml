@@ -9,21 +9,33 @@ Parameters:
     Default: gateway
   ImageUrl:
     Type: String
-  ContainerPort:
+  ServicePort:
     Type: Number
     Default: 80
-  ContainerCpu:
+  TaskCpu:
+    Type: Number
+    Default: 512
+  TaskMemory:
+    Type: Number
+    Default: 2048
+  XRayCPU:
+    Type: Number
+    Default: 32
+  XRayMemory:
     Type: Number
     Default: 256
-  ContainerMemory:
+  EnvoyCPU:
     Type: Number
-    Default: 1024
+    Default: 32
+  EnvoyMemory:
+    Type: Number
+    Default: 256
   ServiceCPU:
     Type: Number
-    Default: 256
+    Default: 448
   ServiceMemory:
     Type: Number
-    Default: 1024
+    Default: 1536
   Priority:
     Type: Number
     Default: 10
@@ -41,8 +53,8 @@ Resources:
     Type: AWS::ECS::TaskDefinition
     Properties:
       Family: !Ref ServiceName
-      Cpu: !Ref ContainerCpu
-      Memory: !Ref ContainerMemory
+      Cpu: !Ref TaskCpu
+      Memory: !Ref TaskMemory
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
@@ -52,11 +64,11 @@ Resources:
         'Fn::Sub': '${EnvironmentName}:ECSTaskRole'
       ContainerDefinitions:
         - Name: !Ref ServiceName
+          Image: !Ref ImageUrl
           Cpu: !Ref ServiceCPU
           Memory: !Ref ServiceMemory
-          Image: !Ref ImageUrl
           PortMappings:
-            - ContainerPort: !Ref ContainerPort
+            - ContainerPort: !Ref ServicePort
           LogConfiguration:
             LogDriver: 'awslogs'
             Options:
@@ -67,14 +79,25 @@ Resources:
             - Name: ACTIVE_ENVIRONMENT
               Value: !Ref EnvironmentName
             - Name: CONTAINER_PORT
-              Value: !Ref ContainerPort
+              Value: !Ref ServicePort
             - Name: SERVICE_DISCOVERY_NAMESPACE_NAME
               Value: !ImportValue
                 'Fn::Sub': '${EnvironmentName}:ServiceDiscoveryNamespaceName'
+        - Name: envoy
+          Image: 840364872350.dkr.ecr.us-east-1.amazonaws.com/aws-appmesh-envoy:v1.22.2.0-prod
+          Cpu: !Ref EnvoyCPU
+          Memory: !Ref EnvoyMemory
+          Environment:
+            - Name: APPMESH_RESOURCE_ARN
+              Value: 1
+            - Name: ENABLE_ENVOY_XRAY_TRACING
+              Value: 1
+            - Name: ENABLE_ENVOY_STATS_TAGS
+              Value: 1
 
   Service:
     Type: AWS::ECS::Service
-    DependsOn: LoadBalancerListenerRule
+    DependsOn: HttpLoadBalancerListenerRule
     Properties:
       ServiceName: !Ref ServiceName
       Cluster: !ImportValue
@@ -98,7 +121,7 @@ Resources:
       TaskDefinition: !Ref TaskDefinition
       LoadBalancers:
         - ContainerName: !Ref ServiceName
-          ContainerPort: !Ref ContainerPort
+          ContainerPort: !Ref ServicePort
           TargetGroupArn: !Ref TargetGroup
       ServiceRegistries:
         - RegistryArn: !GetAtt ServiceDiscoveryService.Arn
@@ -128,13 +151,13 @@ Resources:
       HealthyThresholdCount: 2
       TargetType: ip
       Name: !Ref ServiceName
-      Port: !Ref ContainerPort
+      Port: !Ref ServicePort
       Protocol: HTTP
       UnhealthyThresholdCount: 2
       VpcId: !ImportValue
         'Fn::Sub': '${EnvironmentName}:VpcId'
 
-  LoadBalancerListenerRule:
+  HttpLoadBalancerListenerRule:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
     Properties:
       Actions:
@@ -144,7 +167,7 @@ Resources:
         - Field: path-pattern
           Values: [ '/', '/*' ]
       ListenerArn: !ImportValue
-        'Fn::Sub': '${EnvironmentName}:PublicLoadBalancerListener'
+        'Fn::Sub': '${EnvironmentName}:HttpLoadBalancerListener'
       Priority: !Ref Priority
 
   ECSScalableTarget:
