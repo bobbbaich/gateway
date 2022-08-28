@@ -97,7 +97,7 @@ Resources:
 
   Service:
     Type: AWS::ECS::Service
-    DependsOn: HttpLoadBalancerListenerRule
+    DependsOn: HttpsLoadBalancerListenerRule
     Properties:
       ServiceName: !Ref ServiceName
       Cluster: !ImportValue
@@ -157,7 +157,7 @@ Resources:
       VpcId: !ImportValue
         'Fn::Sub': '${EnvironmentName}:VpcId'
 
-  HttpLoadBalancerListenerRule:
+  HttpsLoadBalancerListenerRule:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
     Properties:
       Actions:
@@ -167,7 +167,7 @@ Resources:
         - Field: path-pattern
           Values: [ '/', '/*' ]
       ListenerArn: !ImportValue
-        'Fn::Sub': '${EnvironmentName}:HttpLoadBalancerListener'
+        'Fn::Sub': '${EnvironmentName}:HttpsLoadBalancerListener'
       Priority: !Ref Priority
 
   ECSScalableTarget:
