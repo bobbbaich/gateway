@@ -83,17 +83,6 @@ Resources:
             - Name: SERVICE_DISCOVERY_NAMESPACE_NAME
               Value: !ImportValue
                 'Fn::Sub': '${EnvironmentName}:ServiceDiscoveryNamespaceName'
-#        - Name: envoy
-#          Image: 840364872350.dkr.ecr.us-east-1.amazonaws.com/aws-appmesh-envoy:v1.22.2.0-prod
-#          Cpu: !Ref EnvoyCPU
-#          Memory: !Ref EnvoyMemory
-#          Environment:
-#            - Name: APPMESH_RESOURCE_ARN
-#              Value: 1
-#            - Name: ENABLE_ENVOY_XRAY_TRACING
-#              Value: 1
-#            - Name: ENABLE_ENVOY_STATS_TAGS
-#              Value: 1
 
   Service:
     Type: AWS::ECS::Service
