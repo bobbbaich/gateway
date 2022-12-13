@@ -18,24 +18,12 @@ Parameters:
   TaskMemory:
     Type: Number
     Default: 2048
-  XRayCPU:
-    Type: Number
-    Default: 32
-  XRayMemory:
-    Type: Number
-    Default: 256
-  EnvoyCPU:
-    Type: Number
-    Default: 32
-  EnvoyMemory:
-    Type: Number
-    Default: 256
   ServiceCPU:
     Type: Number
-    Default: 448
+    Default: 512
   ServiceMemory:
     Type: Number
-    Default: 1536
+    Default: 2048
   Priority:
     Type: Number
     Default: 10
