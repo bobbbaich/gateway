@@ -16,10 +16,15 @@ gateway:
   url:
     reward: http://reward.${SERVICE_DISCOVERY_NAMESPACE_NAME}
 management:
+  tracing:
+    sampling:
+      probability: 0.0
   endpoints:
     web:
       exposure:
         include: health
 logging:
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
   level:
     io.netty.resolver.dns: DEBUG
