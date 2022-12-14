@@ -1,0 +1,14 @@
+gateway:
+  url:
+    reward: http://localhost:8081
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedHeaders: "*"
+            allowed-methods: "*"
+            allowed-origin-patterns:
+              - https://*
+              - http://*

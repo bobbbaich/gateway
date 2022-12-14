@@ -1,18 +1,30 @@
+server:
+  port: ${CONTAINER_PORT:8080}
 spring:
   application:
     name: @project.artifactId@
   cloud:
     gateway:
-      httpclient:
-        wiretap: true
-      httpserver:
-        wiretap: true
       routes:
         - id: reward
-          uri: ${SERVICE_DISCOVERY_NAMESPACE}.reward
+          uri: ${gateway.url.reward}
           predicates:
             - Path=/api/reward/**
+  profiles:
+    active: ${ACTIVE_ENVIRONMENT:local}
+gateway:
+  url:
+    reward: http://reward.${SERVICE_DISCOVERY_NAMESPACE_NAME}
 management:
-  endpoint:
-    health:
-      enabled: true
+  tracing:
+    sampling:
+      probability: 0.0
+  endpoints:
+    web:
+      exposure:
+        include: health
+logging:
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+  level:
+    io.netty.resolver.dns: DEBUG

@@ -3,8 +3,7 @@ name: Development - Deploy to Amazon ECS
 on:
   push:
     branches:
-      - develop
-      - feature/*
+      - master
 
 env:
   ENVIRONMENT: development
