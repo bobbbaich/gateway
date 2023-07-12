@@ -32,6 +32,12 @@ Parameters:
     Default: 2
 
 Resources:
+
+  ECRRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Ref ServiceName
+
   LogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
